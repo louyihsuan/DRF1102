@@ -1,0 +1,23 @@
+python -m venv venv
+pip install django
+django-admin startproject core
+python manage.py startapp quiz
+pip install "graphene-django>=2.0"
+
+
+venv\Scripts\activate
+python manage.py runserver  
+python manage.py makemigrations
+python manage.py migrate  
+
+
+
+pip freeze > requirements.txt
+
+docker build --tag python-django .
+docker run --publish 8000:8000 python-django
+
+
+
+pip install psycopg2
+
