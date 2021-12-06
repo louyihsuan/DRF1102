@@ -23,6 +23,7 @@ router = DefaultRouter()
 router.register(r'users', views.UsersViewSet)
 router.register(r'videos', views.VideosViewSet)
 router.register(r'comments', views.CommentsViewSet)
+router.register(r'vcs', views.VCsViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

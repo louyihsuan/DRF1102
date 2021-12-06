@@ -1,5 +1,10 @@
 common command
 -----------------------------
+CREATE DATABASE drfdemo_videos
+CREATE USER django WITH PASSWORD '12345'
+GRANT ALL PRIVILEGES ON DATABASE drfdemo_videos TO django
+
+
 python -m venv venv
 pip install django
 django-admin startproject core
