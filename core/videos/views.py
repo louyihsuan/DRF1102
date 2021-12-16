@@ -51,7 +51,20 @@ class VideosViewSet(viewsets.ModelViewSet):
         vr = Videos.objects.filter(videoid__in = [i[0] for i in rdvr]).order_by("-numViews")
         serializer_class = VideosSerializer(vr, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
- 
+    
+    #scheduleworker - sync the views of videos from redis to postgresql
+    def sync_vrank(self):
+        rdvr = rd.zrevrange("videoviews", start=0, end=-1, withscores=True, score_cast_func=float)
+        if rdvr is not None:
+            try:
+                for i in rdvr:
+                    data = Videos.objects.get(videoid=i[0].decode())
+                    data.numViews = i[1]
+                    data.save()                    
+
+            except:
+                pass
+
 class CommentsViewSet(viewsets.ModelViewSet):
     
     queryset = Comments.objects.all()
@@ -80,3 +93,4 @@ class VCsViewSet(viewsets.ModelViewSet):
         serializer_class = VCsSerializer(vcs, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
+    
