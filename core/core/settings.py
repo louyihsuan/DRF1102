@@ -101,20 +101,33 @@ DATABASES = {
     }
 }
 
-#Redis
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/0",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
+#REDIS
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+
+#CELERY
+#CELERY_BROKER_URL = 'redis://'+REDIS_HOST+':'+str(REDIS_PORT)+'/'+str(REDIS_DB)
+#CELERY_RESULT_BACKEND = 'redis://'+REDIS_HOST+':'+str(REDIS_PORT)+'/'+str(REDIS_DB)
+#CELERY_RESULT_SERIALIZER = 'json' 
+BROKER_URL = 'redis://'+REDIS_HOST+':'+str(REDIS_PORT)+'/'+str(REDIS_DB)
+CELERY_RESULT_BACKEND = 'redis://'+REDIS_HOST+':'+str(REDIS_PORT)+'/'+str(REDIS_DB)
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = ''
+
+
+#SMTP
+#yovggurrniyykztk
+# SMTP Settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER ='jeffrey10yes@gmail.com'
+EMAIL_HOST_PASSWORD = "yovggurrniyykztk"
+DEFAULT_FROM_EMAIL = 'Celery <jeffrey10yes@gmail.com>'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

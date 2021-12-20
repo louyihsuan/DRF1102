@@ -13,6 +13,7 @@ pip install "graphene-django>=2.0"
 
 venv\Scripts\activate
 python manage.py runserver  
+python manage.py runserver --noreload
 python manage.py makemigrations
 python manage.py migrate  
 
@@ -29,3 +30,8 @@ REDIS
 docker exec -it 8112ff8d87d3 redis-cli
 
 ZRANGE videoviews 0 -1 WITHSCORES
+
+yovggurrniyykztk
+celery -A core worker -l info
+celery -A core worker -l info -P eventlet  -c 10
+celery -A core flower

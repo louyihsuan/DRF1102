@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 
 # Create your views here.
 from videos.models import Users, Videos, Comments, VCs
@@ -9,9 +9,11 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-
+import requests
 import redis
 from django.conf import settings
+
+from videos.task import send_mail_func
 
 # connect to redis
 rd = redis.Redis(host=settings.REDIS_HOST,
@@ -52,6 +54,22 @@ class VideosViewSet(viewsets.ModelViewSet):
         serializer_class = VideosSerializer(vr, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
     
+    # /api/videos/vtopsendmail/
+    @action(detail=False, methods=['get'])
+    def vtopsendmail(self, request):
+        resp = requests.get("http://127.0.0.1:8000/api/videos/vrank/", auth=('django', '12345'))
+        data = resp.json()
+        
+        sendmail = []
+        for topvideo in data:
+            resp = requests.get("http://127.0.0.1:8000/api/users/"+ str(topvideo["userid"]) +"/", auth=('django', '12345'))
+            user = resp.json()
+            topvideo["email"] = user["email"]
+            sendmail.append(topvideo)
+        print (sendmail)
+        send_mail_func.delay(sendmail)
+        return HttpResponse(sendmail)
+
     #scheduleworker - sync the views of videos from redis to postgresql
     def sync_vrank(self):
         rdvr = rd.zrevrange("videoviews", start=0, end=-1, withscores=True, score_cast_func=float)
@@ -93,4 +111,9 @@ class VCsViewSet(viewsets.ModelViewSet):
         serializer_class = VCsSerializer(vcs, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
-    
+'''
+def send_mail_to_all(request):
+    send_mail_func.delay()
+    return HttpResponse("Sent")
+
+'''
