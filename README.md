@@ -34,7 +34,7 @@ The scenario is about design the vidoes platform like Youtube, Netflix.
 
 /api/videos/vrank/
 
-/api/videos/vtopsendmail/ - sendmail with celery in unsync ways
+/api/videos/vtopsendmail/ - sendmail with celery in sync ways
 
 
 /api/vcs/pk/vcdetail/  - rawsql query in id
