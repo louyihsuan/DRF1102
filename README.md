@@ -1,8 +1,8 @@
 # DRF1102 - Django rest framework
 
-This a demo of DRF
+This is a demo of DRF
 
-The scenario is about design the vidoes upload platform like Youtube, Netflix.
+The scenario is about design the vidoes platform like Youtube, Netflix.
 
 
  
