@@ -1,15 +1,27 @@
 common command
 -----------------------------
+
+brew services start postgresql
+brew services stop postgresql
+brew services list 
+
+
 CREATE DATABASE drfdemo_videos
 CREATE USER django WITH PASSWORD '12345'
 GRANT ALL PRIVILEGES ON DATABASE drfdemo_videos TO django
+
+------------------------------
 
 python -m venv venv
 pip install django
 django-admin startproject core
 python manage.py startapp quiz
 pip install "graphene-django>=2.0"
+python3 manage.py createsuperuser
 
+
+cd venv/Scripts
+source activate venv
 
 venv\Scripts\activate
 python manage.py runserver  
@@ -17,8 +29,12 @@ python manage.py runserver --noreload
 python manage.py makemigrations
 python manage.py migrate  
 
+-----------------------------
 
+pip3 install -r requirements.txt
 pip freeze > requirements.txt
+
+-----------------------------
 
 docker build --tag python-django .
 docker run --publish 8000:8000 python-django
@@ -28,10 +44,14 @@ pip install psycopg2
 -----------------------------
 REDIS
 docker exec -it 8112ff8d87d3 redis-cli
-
+keys *
+Select 1
 ZRANGE videoviews 0 -1 WITHSCORES
+
+-----------------------------
 
 yovggurrniyykztk
 celery -A core worker -l info
 celery -A core worker -l info -P eventlet  -c 10
 celery -A core flower
+
